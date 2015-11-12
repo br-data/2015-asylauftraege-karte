@@ -1,50 +1,42 @@
-html, body, #map {
+html {
+  box-sizing: border-box;
+}
+
+*, *:before, *:after {
+  box-sizing: inherit;
+}
+
+html, body, main, .map {
   height: 100%;
 }
 
 body {
   font-family: Helvetica, "Arial", sans-serif;
   font-size: 0.8em;
+  margin: 0;
 }
 
-#map {
-  width: 100%
+main {
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  position: relative;
 }
 
+.map {
+  width: calc(100% - 240px);
+  display: inline-block;
+}
 
 aside {
-  width: 320px;
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
+  width: 240px;
+  display: inline-block;
   background-color: rgba(255,255,255,.9);
-  border-right: 1px solid #ececec; 
+  border-left: 1px solid #ececec; 
   padding: 2em 1.5em;
   -webkit-transition: left .15s ease;
   transition: left .15s ease;
   z-index: 100;
-
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-box-orient: vertical;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: column;
-  -ms-flex-direction: column;
-  flex-direction: column;
-  -webkit-box-pack: start;
-  -webkit-justify-content: flex-start;
-  -ms-flex-pack: start;
-  justify-content: flex-start;
-  -webkit-box-align: stretch;
-  -webkit-align-items: stretch;
-  -ms-flex-align: stretch;
-  align-items: stretch;
-  -webkit-align-content: stretch;
-  -ms-flex-line-pack: stretch;
-  align-content: stretch;
 }
 
 .sidebar-wrapper {
@@ -76,7 +68,8 @@ aside {
 .open {
   position: absolute;
   top: 20px;
-  left: -100px;
+  right: 20px;
+  display: none;
   font-size: 2em;
   cursor: pointer;
   -webkit-transition: all .3s ease;
@@ -96,13 +89,14 @@ aside {
 
 .close {
   position: absolute;
-  top: -5px;
-  right: 7px;
+  top: 20px;
+  right: 20px;
   color: #333;
   font-size: 2em;
   font-weight: bold;
   text-decoration: none;
   cursor: pointer;
+  z-index: 500;
 }
 
 .close:hover {
@@ -115,19 +109,11 @@ aside {
   margin: 0 0 2em;
 }
 
-.info img {
-  width: 120px;
-  height: 120px;
-  margin-right: .7em;
-  vertical-align: bottom;
-}
-
 .info h2 {
   margin: 0 0 .5em;
 }
 
 .info p {
-  display: inline-block;
   margin: 1em 0 .5em;
 }
 
@@ -212,7 +198,6 @@ aside {
   display: inline-block;
 }
 
-
 .states {
   fill: #ccc;
 }
@@ -247,32 +232,4 @@ aside {
 
 .location:hover .location-arcs {
   display: inline;
-}
-
-.tooltip {
-  max-width: 270px;
-  background: #fff; 
-  background: rgba(255,255,255,.9); 
-  padding: 0 1em;
-  border-radius: 2px;
-  box-shadow: 0px 0px 2px 0px #a6a6a6;
-  opacity: 1; 
-  position: absolute;
-}
-
-.tooltip h3 {
-  margin: .5em 0;
-}
-
-.tooltip p {
-  margin: 0 0 .2em 0;
-}
-
-.tooltip p:last-child {
-  margin: 0 0 1em 0;
-}
-
-.tooltip a {
-  color: #333;
-  text-decoration: none;
 }

@@ -1,19 +1,43 @@
 
+var $map = d3.select('.map');
+
+var $info = d3.select('.info');
+var $close = d3.select('.close');
+var $open = d3.select('.open');
+var $sidebar = d3.select('.sidebar');
+var $window = d3.select(window);
+
+var timeout;
+
+$close.on('click', function () {
+
+  $sidebar.style('display', 'none');
+  $close.style('display', 'none');
+  $open.style('display', 'block');
+});
+
+$open.on('click', function () {
+
+  $sidebar.style('display', 'inline-block');
+  $close.style('display', 'block');
+  $open.style('display', 'none');
+});
+
+
 queue()
     .defer(d3.json, "data/germany.json")
     .defer(d3.json, "data/locations.json")
     .defer(d3.json, "data/contracts.json")
-    .await(ready);
+    .await(drawMap);
 
-function ready(error, germany, locations, contracts) {
+function drawMap(error, germany, locations, contracts) {
+
+  console.log("redraw");
 
   if (error) throw error;
 
-  var map = d3.select('#map');
-  var tooltip = map.append("div").attr("class", "tooltip hidden");
-
-  var width = parseInt(map.style('width'));
-  var height = parseInt(map.style('height'));
+  var width = parseInt($map.style('width'));
+  var height = parseInt($map.style('height'));
 
   var feature = topojson.feature(germany, germany.objects.subunits);
   var mesh = topojson.mesh(germany, germany.objects.subunits, function (a, b) {
@@ -69,7 +93,7 @@ function ready(error, germany, locations, contracts) {
     }
   });
 
-  var svg = map.append("svg")
+  var svg = $map.append("svg")
       .attr("width", width)
       .attr("height", height);
 
@@ -94,41 +118,18 @@ function ready(error, germany, locations, contracts) {
       .attr("class", "location")
     .on("mousemove", function (d, i) {
 
-      console.log(d);
+      $info.html(function() {
 
-      var mouse = d3.mouse(svg.node()).map( function(d) { return parseInt(d); } );
-      var left = Math.min(width - 12 * d.name.length, (mouse[0] + 20));
-      var right = Math.min(width - 12 * d.name.length, (width - mouse[0] + 10));
-      var top = Math.min(height - 40, (mouse[1] + 20));
-      var bottom =  Math.min(height - 40, (height - mouse[1] + 10));
-
-      tooltip.classed("hidden", false)
-          .attr("style", function () {
-              var position = "";
-              if((mouse[0] / width) < 0.5) {
-                  position += "left:"+left+"px;";
-              } else {
-                  position += "right:"+right+"px;";
-              }
-              if ((mouse[1] / height) < 0.5) {
-                  position += "top:"+top+"px;";
-              } else {
-                  position += "bottom:"+bottom+"px;";   
-              }
-              return position;
-          })
-          .html(function() {
-
-            return '<h3>' + d.name + '</h3>' +
-              '<p>Ort: ' + d.city + '</p>' +
-              '<p>Anzahl der Aufträge: ' + d.contractors.length + '</p>' + 
-              '<p>Typ: ' + d.type + '</p>' + 
-              '<p>Sector: ' + d.sector + '</p>';
-          });
-        })
-      .on("mouseout",  function(d,i) {
-          tooltip.classed("hidden", true);
+        return '<h2>' + d.name + '</h2>' +
+          '<p>Ort: ' + d.city + '</p>' +
+          '<p>Anzahl der Aufträge: ' + d.contractors.length + '</p>' + 
+          '<p>Typ: ' + d.type + '</p>' + 
+          '<p>Sector: ' + d.sector + '</p>';
       });
+    })
+    .on("mouseout",  function(d,i) {
+        
+    });
 
   location.append("path")
       .attr("class", "location-cell")
@@ -164,4 +165,21 @@ function ready(error, germany, locations, contracts) {
         return d.contractors.length ? ((d.count - 1) * 0.7 + 5) : 7;
       });
 
+  // Redraw on resize end
+  // https://css-tricks.com/snippets/jquery/done-resizing-event/
+  $window.on('resize', function() {
+
+    clearTimeout(timeout);
+
+    timeout = setTimeout(function () {
+
+      resetGraph();
+      drawMap(undefined, germany, locations, contracts);
+    }, 500);
+  }); 
+}
+
+function resetGraph() {
+
+  d3.select('svg').remove();
 }
