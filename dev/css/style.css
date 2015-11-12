@@ -26,6 +26,7 @@ main {
 .map {
   width: calc(100% - 240px);
   display: inline-block;
+  background: #F0F8FF;
 }
 
 aside {
@@ -199,7 +200,7 @@ aside {
 }
 
 .states {
-  fill: #ccc;
+  fill: #616161;
 }
 
 .state-borders {
@@ -213,7 +214,8 @@ aside {
 .location-arcs {
   display: none;
   fill: none;
-  stroke: #000;
+  stroke: white;
+  stroke-width: 3px;
 }
 
 .locations circle {
@@ -222,14 +224,40 @@ aside {
 }
 
 .locations circle.contractor {
-  fill: darkgrey;
+  fill: #27AFFF;
 }
 
 .locations circle.client {
-  fill: gold;
+  fill: #A4D51B;
   cursor: pointer;
 }
 
 .location:hover .location-arcs {
   display: inline;
+}
+
+.contractor {
+  background: #27AFFF;
+}
+
+.client {
+  background: #A4D51B;
+}
+
+.bubble {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  border-radius: 50%;
+  margin-right: .3em;
+  vertical-align: middle;
+}
+
+.line {
+  background: #616161;
+  display: inline-block;
+  width: 1em;
+  height: .2em;
+  margin-right: .3em;
+  vertical-align: middle;
 }

@@ -7,6 +7,12 @@ var $open = d3.select('.open');
 var $sidebar = d3.select('.sidebar');
 var $window = d3.select(window);
 
+var cached = {
+  germany: undefined,
+  locations: undefined,
+  contracts: undefined
+};
+
 var timeout;
 
 $close.on('click', function () {
@@ -14,6 +20,10 @@ $close.on('click', function () {
   $sidebar.style('display', 'none');
   $close.style('display', 'none');
   $open.style('display', 'block');
+  $map.style('width', '100%');
+
+  resetGraph();
+  drawMap(undefined, cached.germany, cached.locations, cached.contracts);
 });
 
 $open.on('click', function () {
@@ -21,8 +31,24 @@ $open.on('click', function () {
   $sidebar.style('display', 'inline-block');
   $close.style('display', 'block');
   $open.style('display', 'none');
+  $map.style('width', 'calc(100% - 240px)');
+
+  resetGraph();
+  drawMap(undefined, cached.germany, cached.locations, cached.contracts);
 });
 
+// Redraw on resize end
+// https://css-tricks.com/snippets/jquery/done-resizing-event/
+$window.on('resize', function() {
+
+  clearTimeout(timeout);
+
+  timeout = setTimeout(function () {
+
+    resetGraph();
+    drawMap(undefined, cached.germany, cached.locations, cached.contracts);
+  }, 500);
+}); 
 
 queue()
     .defer(d3.json, "data/germany.json")
@@ -32,9 +58,17 @@ queue()
 
 function drawMap(error, germany, locations, contracts) {
 
-  console.log("redraw");
+  if (!cached.locations) {
 
-  if (error) throw error;
+    cached.germany = germany;
+    cached.locations = locations;
+    cached.contracts = contracts;
+  }
+ 
+  if (error) {
+
+    throw error;
+  }
 
   var width = parseInt($map.style('width'));
   var height = parseInt($map.style('height'));
@@ -143,7 +177,8 @@ function drawMap(error, germany, locations, contracts) {
     .selectAll("path")
       .data(function (d) {
 
-        return d.contractors;
+        return d.clients.concat(d.contractors);
+        //return d.contractors;
       })
     .enter().append("path")
       .attr("d", function (d) {
@@ -164,19 +199,6 @@ function drawMap(error, germany, locations, contracts) {
 
         return d.contractors.length ? ((d.count - 1) * 0.7 + 5) : 7;
       });
-
-  // Redraw on resize end
-  // https://css-tricks.com/snippets/jquery/done-resizing-event/
-  $window.on('resize', function() {
-
-    clearTimeout(timeout);
-
-    timeout = setTimeout(function () {
-
-      resetGraph();
-      drawMap(undefined, germany, locations, contracts);
-    }, 500);
-  }); 
 }
 
 function resetGraph() {
