@@ -32,7 +32,7 @@ main {
 aside {
   width: 240px;
   display: inline-block;
-  background-color: rgba(255,255,255,.9);
+  background: #fff;
   border-left: 1px solid #ececec; 
   padding: 2em 1.5em;
   -webkit-transition: left .15s ease;
@@ -211,36 +211,46 @@ aside {
   stroke-linecap: round;
 }
 
-.location-arcs {
-  display: none;
+.link {
+  opacity: 0;
   fill: none;
   stroke: white;
   stroke-width: 3px;
+  pointer-events: none;
 }
 
-.locations circle {
-  fill: red;
-  stroke: #fff;
+.location {
+  cursor: pointer;
+  -webkit-transition: opacity .1s ease-in-out;
+  -moz-transition: opacity .1s ease-in-out;
+  -ms-transition: opacity .1s ease-in-out;
+  -o-transition: opacity .1s ease-in-out;
+  transition: opacity .1s ease-in-out;
 }
 
-.locations circle.contractor {
-  fill: #27AFFF;
+.location.contractor {
+
+  fill: #616161;
+  pointer-events: none;
 }
 
-.locations circle.client {
-  fill: #A4D51B;
+.location.client {
+  
   cursor: pointer;
 }
 
-.location:hover .location-arcs {
-  display: inline;
+.location:hover .link {
+  opacity: 1;
 }
 
 .contractor {
+  stroke: #fff;
   background: #27AFFF;
 }
 
 .client {
+  stroke: #fff;
+  fill: #A4D51B;
   background: #A4D51B;
 }
 

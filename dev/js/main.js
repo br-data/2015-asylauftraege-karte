@@ -5,6 +5,7 @@ var $info = d3.select('.info');
 var $close = d3.select('.close');
 var $open = d3.select('.open');
 var $sidebar = d3.select('.sidebar');
+var $list = d3.select('.list');
 var $window = d3.select(window);
 
 var cached = {
@@ -127,6 +128,15 @@ function drawMap(error, germany, locations, contracts) {
     }
   });
 
+  var linked = [];
+
+  contracts.forEach(function (contract, i) {
+  
+    linked[contract.source + ',' + contract.target] = true;
+  });
+
+  console.log(linked);
+
   var svg = $map.append("svg")
       .attr("width", width)
       .attr("height", height);
@@ -149,8 +159,13 @@ function drawMap(error, germany, locations, contracts) {
         return b.count - a.count;
       }))
     .enter().append("g")
-      .attr("class", "location")
+      .attr("class", function(d) {
+
+        return 'location ' + d.type;
+      })
     .on("mousemove", function (d, i) {
+
+      connectedNodes(d);
 
       $info.html(function() {
 
@@ -161,35 +176,61 @@ function drawMap(error, germany, locations, contracts) {
           '<p>Sector: ' + d.sector + '</p>';
       });
     })
-    .on("mouseout",  function(d,i) {
-        
+    .on("mouseout",  function (d, i) {
+
+      connectedNodes(null);
     });
 
-  location.append("path")
-      .attr("class", "location-cell")
-      .attr("d", function (d) {
+  function connectedNodes(d) {
 
-        if (d.cell) return d.cell.length ? "M" + d.cell.join("L") + "Z" : null;
+    if (d !== null) {
+
+      location.style('opacity', function (o) {
+
+        if (d.id === o.id || linked[o.id + ',' + d.id]) {
+
+          return 1;
+        } else {
+
+          return 0.2;
+        }
       });
 
+      location.style('fill', function (o) {
+
+        if (d.id === o.id || linked[o.id + ',' + d.id]) {
+
+          return '#27AFFF';
+        }
+      });
+    } else {
+
+      location.attr('style', null);
+    }
+  }
+
   location.append("g")
-      .attr("class", "location-arcs")
+      .attr("class", "link")
     .selectAll("path")
       .data(function (d) {
 
-        return d.clients.concat(d.contractors);
-        //return d.contractors;
+        //return d.clients.concat(d.contractors);
+        return d.contractors;
       })
     .enter().append("path")
       .attr("d", function (d) {
 
         return path({type: "LineString", coordinates: [d.source, d.target]});
       });
+      // .attr("stroke-width", function (d) {
+
+      //   return 10;
+      // });
 
   location.append("circle")
       .attr("class", function (d) {
 
-        return d.contractors.length ? 'client' : 'contractor';
+        return d.type;
       })
       .attr("transform", function (d) {
 
@@ -197,7 +238,7 @@ function drawMap(error, germany, locations, contracts) {
       })
       .attr("r", function (d, i) {
 
-        return d.contractors.length ? ((d.count - 1) * 0.7 + 5) : 7;
+        return d.type === 'client' ? ((d.count - 1) * 0.7 + 5) : 7;
       });
 }
 
