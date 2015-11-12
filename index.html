@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+html, body, #map {
+  height: 100%;
+  width: 100%;
+}
+
+.states {
+  fill: #ccc;
+}
+
+.state-borders {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.5px;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.location-arcs {
+  display: none;
+  fill: none;
+  stroke: #000;
+}
+
+.locations circle {
+  fill: red;
+  stroke: #fff;
+}
+
+.locations circle.contractor {
+  fill: steelblue;
+}
+
+.locations circle.client {
+  fill: gold;
+}
+
+.location:hover .location-arcs {
+  display: inline;
+}
+
+</style>
+<body>
+
+<main id="map"></main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.5/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/queue-async/1.0.7/queue.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.19/topojson.min.js"></script>
+<script>
+
+queue()
+    .defer(d3.json, "germany.json")
+    .defer(d3.json, "locations.json")
+    .defer(d3.json, "contracts.json")
+    .await(ready);
+
+function ready(error, germany, locations, contracts) {
+
+  if (error) throw error;
+
+  var map = d3.select('#map');
+
+  var width = parseInt(map.style('width'));
+  var height = parseInt(map.style('height'));
+
+  var feature = topojson.feature(germany, germany.objects.subunits);
+  var mesh = topojson.mesh(germany, germany.objects.subunits, function (a, b) {
+
+        return a !== b;
+      });
+
+  var center = d3.geo.centroid(feature);
+  var scale  = 150;
+  var offset = [width / 2, height / 2];
+  var projection = d3.geo.mercator().scale(scale).center(center)
+      .translate(offset);
+  var path = d3.geo.path().projection(projection);
+  var bounds = path.bounds(feature);
+  var hscale = scale * width  / (bounds[1][0] - bounds[0][0]);
+  var vscale = scale * height / (bounds[1][1] - bounds[0][1]);
+  var scale = (hscale < vscale) ? hscale : vscale;
+  var offset = [width - (bounds[0][0] + bounds[1][0]) / 2, height - (bounds[0][1] + bounds[1][1]) / 2];
+
+  projection = d3.geo.mercator().center(center)
+    .scale(scale).translate(offset);
+  path = path.projection(projection);
+
+  var locationById = d3.map();
+
+  locations.forEach(function (d) {
+
+    locationById.set(d.id, d);
+    d.clients = [];
+    d.contractors = [];
+  });
+
+  contracts.forEach(function (contract) {
+
+    var source = locationById.get(contract.source),
+        target = locationById.get(contract.target),
+        link = {source: source, target: target};
+
+    source.clients.push(link);
+    target.contractors.push(link);
+  });
+
+  locations = locations.filter(function (d) {
+
+    if (d.count = Math.max(d.clients.length, d.contractors.length)) {
+
+      d[0] = +d.long;
+      d[1] = +d.lat;
+      var position = projection(d);
+      d.x = position[0];
+      d.y = position[1];
+      return true;
+    }
+  });
+
+  var svg = map.append("svg")
+      .attr("width", width)
+      .attr("height", height);
+
+  svg.append("path")
+      .datum(feature)
+      .attr("class", "states")
+      .attr("d", path);
+
+  svg.append("path")
+      .datum(mesh)
+      .attr("class", "state-borders")
+      .attr("d", path);
+
+  var location = svg.append("g")
+      .attr("class", "locations")
+    .selectAll("g")
+      .data(locations.sort(function (a, b) {
+
+        return b.count - a.count;
+      }))
+    .enter().append("g")
+      .attr("class", "location");
+
+  location.append("path")
+      .attr("class", "location-cell")
+      .attr("d", function (d) {
+
+        if (d.cell) return d.cell.length ? "M" + d.cell.join("L") + "Z" : null;
+      });
+
+  location.append("g")
+      .attr("class", "location-arcs")
+    .selectAll("path")
+      .data(function (d) {
+
+        return d.clients;
+      })
+    .enter().append("path")
+      .attr("d", function (d) {
+
+        return path({type: "LineString", coordinates: [d.source, d.target]});
+      });
+
+  location.append("circle")
+      .attr("class", function (d) {
+
+        return d.contractors.length ? 'client' : 'contractor';
+      })
+      .attr("transform", function (d) {
+
+        return "translate(" + d.x + "," + d.y + ")";
+      })
+      .attr("r", function (d, i) {
+
+        return (d.count - 1) * 0.4 + 5;
+      });
+
+}
+
+</script>
