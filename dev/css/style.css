@@ -1,0 +1,278 @@
+html, body, #map {
+  height: 100%;
+}
+
+body {
+  font-family: Helvetica, "Arial", sans-serif;
+  font-size: 0.8em;
+}
+
+#map {
+  width: 100%
+}
+
+
+aside {
+  width: 320px;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  background-color: rgba(255,255,255,.9);
+  border-right: 1px solid #ececec; 
+  padding: 2em 1.5em;
+  -webkit-transition: left .15s ease;
+  transition: left .15s ease;
+  z-index: 100;
+
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-box-align: stretch;
+  -webkit-align-items: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+  -webkit-align-content: stretch;
+  -ms-flex-line-pack: stretch;
+  align-content: stretch;
+}
+
+.sidebar-wrapper {
+  height: 100%;
+  position: relative;
+
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-box-align: stretch;
+  -webkit-align-items: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+  -webkit-align-content: stretch;
+  -ms-flex-line-pack: stretch;
+  align-content: stretch;
+}
+
+.open {
+  position: absolute;
+  top: 20px;
+  left: -100px;
+  font-size: 2em;
+  cursor: pointer;
+  -webkit-transition: all .3s ease;
+  transition: all .3s ease;
+  z-index: 500;
+}
+
+.open:hover {
+  color: #ccc;
+  -webkit-transition: color .15s ease;
+  transition: color .15s ease;
+}
+
+.open:after {
+  content: '☰';
+}
+
+.close {
+  position: absolute;
+  top: -5px;
+  right: 7px;
+  color: #333;
+  font-size: 2em;
+  font-weight: bold;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: #ccc;
+  -webkit-transition: color .15s ease;
+  transition: color .15s ease;
+}
+
+.info {
+  margin: 0 0 2em;
+}
+
+.info img {
+  width: 120px;
+  height: 120px;
+  margin-right: .7em;
+  vertical-align: bottom;
+}
+
+.info h2 {
+  margin: 0 0 .5em;
+}
+
+.info p {
+  display: inline-block;
+  margin: 1em 0 .5em;
+}
+
+.list-wrapper {
+  position: relative;
+
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+  -ms-flex-direction: row;
+  flex-direction: row;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+  -ms-flex-pack: start;
+  justify-content: flex-start;
+  -webkit-box-align: stretch;
+  -webkit-align-items: stretch;
+  -ms-flex-align: stretch;
+  align-items: stretch;
+  -webkit-align-content: stretch;
+  -ms-flex-line-pack: stretch;
+  align-content: stretch;
+}
+
+.list {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+  -ms-flex: 1;
+  flex: 1;
+  overflow: auto; 
+}
+
+.list:after {
+  content: '\a';
+  white-space: pre;
+  display: inline-block;
+  height: 1.6em;
+}
+
+.list p {
+  margin: 0 0 0.3em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.gradient {
+  opacity: .9;
+  height: 60px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  background: -moz-linear-gradient(top, rgba(254, 254, 254, 0) 0%, rgba(254, 254, 254, 0.01) 1%, rgba(254, 254, 254, 1) 75%, rgba(254, 254, 254, 1) 100%);
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, rgba(254, 254, 254, 0)), color-stop(1%, rgba(254, 254, 254, 0.01)), color-stop(75%, rgba(254, 254, 254, 1)), color-stop(100%, rgba(254, 254, 254, 1)));
+  background: -webkit-linear-gradient(top, rgba(254, 254, 254, 0) 0%, rgba(254, 254, 254, 0.01) 1%, rgba(254, 254, 254, 1) 75%, rgba(254, 254, 254, 1) 100%);
+  background: -o-linear-gradient(top, rgba(254, 254, 254, 0) 0%, rgba(254, 254, 254, 0.01) 1%, rgba(254, 254, 254, 1) 75%, rgba(254, 254, 254, 1) 100%);
+  background: -ms-linear-gradient(top, rgba(254, 254, 254, 0) 0%, rgba(254, 254, 254, 0.01) 1%, rgba(254, 254, 254, 1) 75%, rgba(254, 254, 254, 1) 100%);
+  background: linear-gradient(to bottom, rgba(254, 254, 254, 0) 0%, rgba(254, 254, 254, 0.01) 1%, rgba(254, 254, 254, 1) 75%, rgba(254, 254, 254, 1) 100%);
+  filter: progid: DXImageTransform.Microsoft.gradient( startColorstr='#00ffffff', endColorstr='#ffffff', GradientType=0);
+}
+
+.legend ul {
+  padding: 0;
+  display: block;
+  list-style-type: none;
+}
+
+.legend li {
+  display: inline-block;
+  padding: 0.2em 0;
+  width: 130px;
+  display: inline-block;
+}
+
+
+.states {
+  fill: #ccc;
+}
+
+.state-borders {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1.5px;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.location-arcs {
+  display: none;
+  fill: none;
+  stroke: #000;
+}
+
+.locations circle {
+  fill: red;
+  stroke: #fff;
+}
+
+.locations circle.contractor {
+  fill: darkgrey;
+}
+
+.locations circle.client {
+  fill: gold;
+  cursor: pointer;
+}
+
+.location:hover .location-arcs {
+  display: inline;
+}
+
+.tooltip {
+  max-width: 270px;
+  background: #fff; 
+  background: rgba(255,255,255,.9); 
+  padding: 0 1em;
+  border-radius: 2px;
+  box-shadow: 0px 0px 2px 0px #a6a6a6;
+  opacity: 1; 
+  position: absolute;
+}
+
+.tooltip h3 {
+  margin: .5em 0;
+}
+
+.tooltip p {
+  margin: 0 0 .2em 0;
+}
+
+.tooltip p:last-child {
+  margin: 0 0 1em 0;
+}
+
+.tooltip a {
+  color: #333;
+  text-decoration: none;
+}
