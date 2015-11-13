@@ -3,7 +3,7 @@
 
   var svg, rect, zoom, drag, feature, mesh, projection, path,
   width, height, center, scale, offset, hscale, vscale, bounds,
-  location, locationById, timeout, currentId;
+  position, location, locationById, timeout, currentId;
 
   var linked = [];
 
@@ -205,46 +205,54 @@
 
         });
 
-    location.append("circle")
-        .attr("class", function (d) {
-
-          return d.type;
-        })
+    position = location.append("g")
+        .attr("class", "position")
         .attr("transform", function (d) {
 
           return "translate(" + d.x + "," + d.y + ")";
+        })
+
+    position.append('svg:text')
+        .attr('x', 14)
+        .attr('y', '.4em')
+        .text(function(d) {
+          
+          if (d.type === 'contractor') {
+
+            return d.name;
+          } 
+        });
+
+    position.append("circle")
+        .attr("class", function (d) {
+
+          return d.type;
         })
         .attr("r", function (d, i) {
 
           return d.type === 'client' ? (Math.floor((d.count - 1) * 0.7 + 5)) : 7;
         });
+
+
   }
 
   function highlightLocation(d) {
 
     if (d) {
 
-      location.style('opacity', function (o) {
+      position.attr('class', function (o) {
 
         if (d.id === o.id || linked[o.id + ',' + d.id]) {
 
-          return 1;
+          return 'position highlight';
         } else {
 
-          return 0.2;
-        }
-      });
-
-      location.style('fill', function (o) {
-
-        if (d.id === o.id || linked[o.id + ',' + d.id]) {
-
-          return '#27AFFF';
+          return 'position dim';
         }
       });
     } else {
 
-      location.attr('style', null);
+      position.attr('class', 'position');
     }
   }
 
@@ -373,4 +381,25 @@
 
     element.list.style('height', listHeight + 'px');
   }
+
+  d3.selection.prototype.moveToFront = function () {
+    
+    return this.each(function (){
+
+      this.parentNode.appendChild(this);
+    });
+  };
+
+  d3.selection.prototype.moveToBack = function () { 
+
+    return this.each(function () {
+
+        var firstChild = this.parentNode.firstChild; 
+
+        if (firstChild) { 
+
+            this.parentNode.insertBefore(this, firstChild); 
+        } 
+    }); 
+  };
 })();

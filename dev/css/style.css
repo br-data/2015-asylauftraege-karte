@@ -167,13 +167,12 @@ aside a {
 .link {
   opacity: 0;
   fill: none;
-  stroke: white;
+  stroke: #fff;
   stroke-width: 3px;
   pointer-events: none;
 }
 
 .location {
-  cursor: pointer;
   -webkit-transition: opacity .1s ease-in-out;
   -moz-transition: opacity .1s ease-in-out;
   -ms-transition: opacity .1s ease-in-out;
@@ -181,18 +180,33 @@ aside a {
   transition: opacity .1s ease-in-out;
 }
 
-.location.contractor {
-
-  fill: #616161;
-  pointer-events: none;
+.location:hover .link {
+  opacity: 1;
 }
 
-.location.client {
-  
+.client {
   cursor: pointer;
 }
 
-.location:hover .link {
+.contractor {
+  pointer-events: none;
+}
+
+.contractor .position text {
+  opacity: 0;
+  fill: #27AFFF;
+  stroke: none;
+}
+
+.contractor .position circle {
+  fill: #616161;
+}
+
+.contractor .position.highlight circle {
+  fill: #27AFFF;
+}
+
+.contractor .position.highlight text {
   opacity: 1;
 }
 
