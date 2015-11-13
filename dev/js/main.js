@@ -16,10 +16,9 @@ var cached = {
 };
 
 var timeout;
-
+var currentId;
 
 applyListHeight();
-
 
 $close.on('click', function () {
 
@@ -174,28 +173,33 @@ function drawMap(error, germany, locations, contracts) {
       })
     .on("mousemove", function (d, i) {
 
-      connectedNodes(d);
+      if (d.id != currentId) {
 
-      $info.html(function() {
+        currentId = d.id;
 
-        return '<h2>' + d.name + '</h2>' +
-          '<p>Ort: ' + d.city + '</p>' +
-          '<p>Anzahl der Aufträge: ' + d.contractors.length + '</p>' + 
-          '<p>Typ: ' + d.type + '</p>' + 
-          '<p>Sector: ' + d.sector + '</p>';
-      });
+        connectedNodes(d);
 
-      $list.html(function () {
+        $info.html(function() {
 
-        var html = '';
+          return '<h2>' + d.name + '</h2>' +
+            '<p>Ort: ' + d.city + '</p>' +
+            '<p>Anzahl der Aufträge: ' + d.contractors.length + '</p>' + 
+            '<p>Typ: ' + d.type + '</p>' + 
+            '<p>Sector: ' + d.sector + '</p>';
+        });
 
-        for (var i = 0; i < d.contracts.length; i++) {
+        $list.html(function () {
 
-          html += '<p><a title="' + d.contracts[i].name +'" href="' + d.contracts[i].url + '" target="_blank"> ' + d.contracts[i].name + ' (' + d.contracts[i].year + ')</a></p>';
-        }
+          var html = '';
 
-        return html;
-      });
+          for (var i = 0; i < d.contracts.length; i++) {
+
+            html += '<p><a title="' + d.contracts[i].name +'" href="' + d.contracts[i].url + '" target="_blank"> ' + d.contracts[i].name + ' (' + d.contracts[i].year + ')</a></p>';
+          }
+
+          return html;
+        });
+      }
     })
     .on("mouseout",  function (d, i) {
 
@@ -242,11 +246,12 @@ function drawMap(error, germany, locations, contracts) {
       .attr("d", function (d) {
 
         return path({type: "LineString", coordinates: [d.source, d.target]});
-      });
-      // .attr("stroke-width", function (d) {
+      })
+      .attr("stroke-width", function (d) {
 
-      //   return 10;
-      // });
+        return Math.floor((d.target.contractors.length - 1) * 0.3 + 2);
+
+      });
 
   location.append("circle")
       .attr("class", function (d) {
@@ -259,7 +264,7 @@ function drawMap(error, germany, locations, contracts) {
       })
       .attr("r", function (d, i) {
 
-        return d.type === 'client' ? ((d.count - 1) * 0.7 + 5) : 7;
+        return d.type === 'client' ? (Math.floor((d.count - 1) * 0.7 + 5)) : 7;
       });
 }
 
