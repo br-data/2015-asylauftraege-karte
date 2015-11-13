@@ -171,7 +171,8 @@
         })
       .on("mousemove", function (d, i) {
 
-        if (d.id != currentId) {
+        //if (d.id != currentId) {
+        if (true) {
 
           currentId = d.id;
 
@@ -254,10 +255,10 @@
       var html = '';
 
       html += '<h2>' + d.name + '</h2>' +
-              '<p>Ort: ' + d.city + '</p>' +
-              '<p>Anzahl der Aufträge: ' + d.contractors.length + '</p>' + 
-              '<p>Typ: ' + d.type + '</p>' + 
-              '<p>Sector: ' + d.sector + '</p>';
+              '<p><strong>Ort:</strong> ' + d.city + '</p>' +
+              '<p><strong>Anzahl der Aufträge:</strong> ' + d.contractors.length + '</p>' + 
+              '<p><strong>Typ:</strong> ' + d.type + '</p>' + 
+              '<p><strong>Sector:</strong> ' + d.sector + '</p>';
 
       return html;
     });
