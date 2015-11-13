@@ -123,7 +123,7 @@
     });
 
     zoom = d3.behavior.zoom()
-        .scaleExtent([0.4, 2])
+        .scaleExtent([0.4, 3])
         .on('zoom', zoomed);
 
     svg = element.map.append("svg")
@@ -171,8 +171,7 @@
         })
       .on("mousemove", function (d, i) {
 
-        //if (d.id != currentId) {
-        if (true) {
+        if (d.id != currentId) {
 
           currentId = d.id;
 
@@ -183,6 +182,7 @@
       })
       .on("mouseout",  function (d, i) {
 
+        currentId = undefined;
         highlightLocation();
       });
 
@@ -232,14 +232,31 @@
 
           return d.type === 'client' ? (Math.floor((d.count - 1) * 0.7 + 5)) : 7;
         });
-
-
   }
 
   function highlightLocation(d) {
 
     if (d) {
 
+      // Move link to front
+      location.each(function (o) {
+
+        if (d.id === o.id || linked[o.id + ',' + d.id]) {
+
+            d3.select(this).moveToFront();
+        }
+      });
+
+      // Move contractor marker to front
+      location.each(function (o) {
+
+        if (o.type === 'contractor' && linked[o.id + ',' + d.id]) {
+
+            d3.select(this).moveToFront();
+        }
+      });
+
+      // Highlight currently selected 
       position.attr('class', function (o) {
 
         if (d.id === o.id || linked[o.id + ',' + d.id]) {
@@ -247,7 +264,7 @@
           return 'position highlight';
         } else {
 
-          return 'position dim';
+          return 'position';
         }
       });
     } else {
@@ -383,7 +400,7 @@
   }
 
   d3.selection.prototype.moveToFront = function () {
-    
+
     return this.each(function (){
 
       this.parentNode.appendChild(this);
