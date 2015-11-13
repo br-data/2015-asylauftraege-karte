@@ -39,8 +39,6 @@ aside {
   background: #fff;
   border-left: 1px solid #ececec; 
   padding: 2em 1.5em 0;
-  -webkit-transition: left .15s ease;
-  transition: left .15s ease;
   z-index: 100;
 }
 
@@ -68,15 +66,11 @@ aside a {
   display: none;
   font-size: 2em;
   cursor: pointer;
-  -webkit-transition: all .3s ease;
-  transition: all .3s ease;
   z-index: 500;
 }
 
 .open:hover {
   color: #ccc;
-  -webkit-transition: color .15s ease;
-  transition: color .15s ease;
 }
 
 .open:after {
@@ -96,8 +90,6 @@ aside a {
 
 .close:hover {
   color: #ccc;
-  -webkit-transition: color .15s ease;
-  transition: color .15s ease;
 }
 
 .info {
@@ -238,7 +230,7 @@ aside a {
   left: 40px;
   top: 20px;
   text-align: center;
-  font-size: 3em;
+  font-size: 2.5em;
   line-height: 1em;
 }
 

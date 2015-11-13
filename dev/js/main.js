@@ -64,8 +64,8 @@
     feature = topojson.feature(germany, germany.objects.subunits);
     mesh = topojson.mesh(germany, germany.objects.subunits, function (a, b) {
 
-          return a !== b;
-        });
+        return a !== b;
+      });
 
     center = d3.geo.centroid(feature);
     scale  = 150;
@@ -176,27 +176,8 @@
           currentId = d.id;
 
           highlightLocation(d);
-
-          element.info.html(function() {
-
-            return '<h2>' + d.name + '</h2>' +
-              '<p>Ort: ' + d.city + '</p>' +
-              '<p>Anzahl der Aufträge: ' + d.contractors.length + '</p>' + 
-              '<p>Typ: ' + d.type + '</p>' + 
-              '<p>Sector: ' + d.sector + '</p>';
-          });
-
-          element.list.html(function () {
-
-            var html = '';
-
-            for (var i = 0; i < d.contracts.length; i++) {
-
-              html += '<p><a title="' + d.contracts[i].name +'" href="' + d.contracts[i].url + '" target="_blank"> ' + d.contracts[i].name + ' (' + d.contracts[i].year + ')</a></p>';
-            }
-
-            return html;
-          });
+          updateInfo(d);
+          updateList(d);
         }
       })
       .on("mouseout",  function (d, i) {
@@ -264,6 +245,39 @@
 
       location.attr('style', null);
     }
+  }
+
+  function updateInfo(d) {
+    
+    element.info.html(function() {
+
+      var html = '';
+
+      html += '<h2>' + d.name + '</h2>' +
+              '<p>Ort: ' + d.city + '</p>' +
+              '<p>Anzahl der Aufträge: ' + d.contractors.length + '</p>' + 
+              '<p>Typ: ' + d.type + '</p>' + 
+              '<p>Sector: ' + d.sector + '</p>';
+
+      return html;
+    });
+  }
+
+  function updateList(d) {
+
+    element.list.html(function () {
+
+      var html = '';
+
+      for (var i = 0; i < d.contracts.length; i++) {
+
+        html += '<p><a title="' + d.contracts[i].name +'" href="' +
+                d.contracts[i].url + '" target="_blank"> ' +
+                d.contracts[i].name + ' (' + d.contracts[i].year + ')</a></p>';
+      }
+
+      return html;
+    });
   }
 
   function zoomed() {
