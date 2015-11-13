@@ -85,7 +85,7 @@ aside a {
 
 .close {
   float: right;
-  font-size: 1.5em;
+  font-size: 2em;
   line-height: 1em;
   margin-left: 1em;
   font-weight: bold;
@@ -140,7 +140,7 @@ aside a {
 }
 
 .legend {
-  height: 150px;
+  height: 160px;
   width: 100%;
   position: absolute;
   bottom: 0;
@@ -231,3 +231,15 @@ aside a {
   margin-right: .3em;
   vertical-align: middle;
 }
+
+.zoom {
+  cursor: pointer;
+  position: absolute;
+  left: 40px;
+  top: 20px;
+  text-align: center;
+  font-size: 3em;
+  line-height: 1em;
+}
+
+

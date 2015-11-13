@@ -23,6 +23,12 @@
     contracts: undefined
   };
 
+  d3.selectAll('div[data-zoom]').on('click', function () {
+
+    setTranslationCenter(this.dataset.zoom);
+    zoomed();
+  });
+
   (function init() {
 
     applyListHeight();
@@ -36,6 +42,8 @@
   })();
 
   function drawMap(error, germany, locations, contracts) {
+
+
 
     if (!data.locations) {
 
@@ -115,9 +123,30 @@
       linked[contract.source + ',' + contract.target] = true;
     });
 
+    var zoom = d3.behavior.zoom()
+        .scaleExtent([0.4, 2])
+        .on('zoom', zoomed);
+
     var svg = element.map.append("svg")
         .attr("width", width)
-        .attr("height", height);
+        .attr("height", height)
+         .attr('pointer-events', 'all')
+      .append('svg:g')
+        .call(zoom)
+      .append('svg:g');
+
+    var rect = svg.append('svg:rect')
+        .attr('width', width * 2)
+        .attr('height', height * 2)
+        .attr('x', width / 2 - width)
+        .attr('y', height / 2 - height)
+        .attr('fill', '#fff')
+        .attr('fill-opacity', '0');
+
+    drag = d3.behavior.drag().origin(function(d) {
+
+        return d;
+      });
 
     svg.append("path")
         .datum(feature)
@@ -237,6 +266,41 @@
         location.attr('style', null);
       }
     }
+
+    function zoomed() {
+
+      svg.attr('transform',
+          'translate(' + zoom.translate() + ')' +
+          ' scale(' + zoom.scale() + ')');
+    }
+  }
+
+  function setTranslationCenter(factor) {
+
+    var direction = 1,
+      targetZoom = 1,
+      center = [width / 2, height / 2],
+      extent = zoom.scaleExtent(),
+      translate = zoom.translate(),
+      translate0 = [],
+      l = [],
+      view = { x: translate[0], y: translate[1], k: zoom.scale() };
+
+    d3.event.preventDefault();
+    targetZoom = zoom.scale() * (1 + factor * direction);
+
+    if (targetZoom < extent[0] || targetZoom > extent[1]) {
+
+      return false;
+    }
+
+    translate0 = [(center[0] - view.x) / view.k, (center[1] - view.y) / view.k];
+    view.k = targetZoom;
+    l = [translate0[0] * view.k + view.x, translate0[1] * view.k + view.y];
+    view.x += center[0] - l[0];
+    view.y += center[1] - l[1];
+
+    zoom.scale(view.k).translate([view.x, view.y]);
   }
 
   function resetGraph() {
