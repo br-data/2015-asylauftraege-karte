@@ -1,8 +1,11 @@
 
 (function app() {
 
-  var timeout;
-  var currentId;
+  var svg, rect, zoom, drag, feature, mesh, projection, path,
+  width, height, center, scale, offset, hscale, vscale, bounds,
+  location, locationById, timeout, currentId;
+
+  var linked = [];
 
   var element = {
 
@@ -43,8 +46,6 @@
 
   function drawMap(error, germany, locations, contracts) {
 
-
-
     if (!data.locations) {
 
       data.germany = germany;
@@ -57,32 +58,32 @@
       throw error;
     }
 
-    var width = parseInt(element.map.style('width'));
-    var height = parseInt(element.map.style('height'));
+    width = parseInt(element.map.style('width'));
+    height = parseInt(element.map.style('height'));
 
-    var feature = topojson.feature(germany, germany.objects.subunits);
-    var mesh = topojson.mesh(germany, germany.objects.subunits, function (a, b) {
+    feature = topojson.feature(germany, germany.objects.subunits);
+    mesh = topojson.mesh(germany, germany.objects.subunits, function (a, b) {
 
           return a !== b;
         });
 
-    var center = d3.geo.centroid(feature);
-    var scale  = 150;
-    var offset = [width / 2, height / 2];
-    var projection = d3.geo.mercator().scale(scale).center(center)
+    center = d3.geo.centroid(feature);
+    scale  = 150;
+    offset = [width / 2, height / 2];
+    projection = d3.geo.mercator().scale(scale).center(center)
         .translate(offset);
-    var path = d3.geo.path().projection(projection);
-    var bounds = path.bounds(feature);
-    var hscale = scale * width  / (bounds[1][0] - bounds[0][0]);
-    var vscale = scale * height / (bounds[1][1] - bounds[0][1]);
-    var scale = (hscale < vscale) ? hscale : vscale;
-    var offset = [width - (bounds[0][0] + bounds[1][0]) / 2, height - (bounds[0][1] + bounds[1][1]) / 2];
+    path = d3.geo.path().projection(projection);
+    bounds = path.bounds(feature);
+    hscale = scale * width  / (bounds[1][0] - bounds[0][0]);
+    vscale = scale * height / (bounds[1][1] - bounds[0][1]);
+    scale = (hscale < vscale) ? hscale : vscale;
+    offset = [width - (bounds[0][0] + bounds[1][0]) / 2, height - (bounds[0][1] + bounds[1][1]) / 2];
 
     projection = d3.geo.mercator().center(center)
       .scale(scale).translate(offset);
     path = path.projection(projection);
 
-    var locationById = d3.map();
+    locationById = d3.map();
 
     locations.forEach(function (d) {
 
@@ -116,18 +117,16 @@
       }
     });
 
-    var linked = [];
-
     contracts.forEach(function (contract, i) {
     
       linked[contract.source + ',' + contract.target] = true;
     });
 
-    var zoom = d3.behavior.zoom()
+    zoom = d3.behavior.zoom()
         .scaleExtent([0.4, 2])
         .on('zoom', zoomed);
 
-    var svg = element.map.append("svg")
+    svg = element.map.append("svg")
         .attr("width", width)
         .attr("height", height)
          .attr('pointer-events', 'all')
@@ -135,7 +134,7 @@
         .call(zoom)
       .append('svg:g');
 
-    var rect = svg.append('svg:rect')
+    rect = svg.append('svg:rect')
         .attr('width', width * 2)
         .attr('height', height * 2)
         .attr('x', width / 2 - width)
@@ -158,7 +157,7 @@
         .attr("class", "state-borders")
         .attr("d", path);
 
-    var location = svg.append("g")
+    location = svg.append("g")
         .attr("class", "locations")
       .selectAll("g")
         .data(locations.sort(function (a, b) {
@@ -237,42 +236,41 @@
 
           return d.type === 'client' ? (Math.floor((d.count - 1) * 0.7 + 5)) : 7;
         });
+  }
 
+  function highlightLocation(d) {
 
-    function highlightLocation(d) {
+    if (d) {
 
-      if (d) {
+      location.style('opacity', function (o) {
 
-        location.style('opacity', function (o) {
+        if (d.id === o.id || linked[o.id + ',' + d.id]) {
 
-          if (d.id === o.id || linked[o.id + ',' + d.id]) {
+          return 1;
+        } else {
 
-            return 1;
-          } else {
+          return 0.2;
+        }
+      });
 
-            return 0.2;
-          }
-        });
+      location.style('fill', function (o) {
 
-        location.style('fill', function (o) {
+        if (d.id === o.id || linked[o.id + ',' + d.id]) {
 
-          if (d.id === o.id || linked[o.id + ',' + d.id]) {
+          return '#27AFFF';
+        }
+      });
+    } else {
 
-            return '#27AFFF';
-          }
-        });
-      } else {
-
-        location.attr('style', null);
-      }
+      location.attr('style', null);
     }
+  }
 
-    function zoomed() {
+  function zoomed() {
 
-      svg.attr('transform',
-          'translate(' + zoom.translate() + ')' +
-          ' scale(' + zoom.scale() + ')');
-    }
+    svg.attr('transform',
+        'translate(' + zoom.translate() + ')' +
+        ' scale(' + zoom.scale() + ')');
   }
 
   function setTranslationCenter(factor) {
