@@ -158,7 +158,7 @@ aside a {
 
 .state-borders {
   fill: none;
-  stroke: #fff;
+  stroke: #383838;
   stroke-width: 1.5px;
   stroke-linejoin: round;
   stroke-linecap: round;
@@ -192,14 +192,19 @@ aside a {
   pointer-events: none;
 }
 
-.contractor .position text {
-  opacity: 0;
-  fill: #27AFFF;
-  stroke: none;
+.position.dim {
+  opacity: 0.1;
 }
 
 .contractor .position circle {
   fill: #616161;
+}
+
+.contractor .position text {
+  opacity: 0;
+  fill: #fff;
+  stroke: none;
+  text-shadow: 1px 1px 1px #616161,1px -1px 1px #616161,-1px 1px 1px #616161,-1px -1px 1px #616161;
 }
 
 .contractor .position.highlight circle {

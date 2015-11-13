@@ -264,7 +264,7 @@
           return 'position highlight';
         } else {
 
-          return 'position';
+          return 'position dim';
         }
       });
     } else {
