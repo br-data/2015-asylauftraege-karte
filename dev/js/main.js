@@ -6,6 +6,7 @@ var $close = d3.select('.close');
 var $open = d3.select('.open');
 var $sidebar = d3.select('.sidebar');
 var $list = d3.select('.list');
+var $legend = d3.select('.legend');
 var $window = d3.select(window);
 
 var cached = {
@@ -15,6 +16,10 @@ var cached = {
 };
 
 var timeout;
+
+
+applyListHeight();
+
 
 $close.on('click', function () {
 
@@ -38,8 +43,6 @@ $open.on('click', function () {
   drawMap(undefined, cached.germany, cached.locations, cached.contracts);
 });
 
-// Redraw on resize end
-// https://css-tricks.com/snippets/jquery/done-resizing-event/
 $window.on('resize', function() {
 
   clearTimeout(timeout);
@@ -48,6 +51,8 @@ $window.on('resize', function() {
 
     resetGraph();
     drawMap(undefined, cached.germany, cached.locations, cached.contracts);
+
+    applyListHeight();
   }, 500);
 }); 
 
@@ -58,6 +63,8 @@ queue()
     .await(drawMap);
 
 function drawMap(error, germany, locations, contracts) {
+
+  console.log(locations[0]);
 
   if (!cached.locations) {
 
@@ -73,6 +80,8 @@ function drawMap(error, germany, locations, contracts) {
 
   var width = parseInt($map.style('width'));
   var height = parseInt($map.style('height'));
+
+
 
   var feature = topojson.feature(germany, germany.objects.subunits);
   var mesh = topojson.mesh(germany, germany.objects.subunits, function (a, b) {
@@ -103,16 +112,18 @@ function drawMap(error, germany, locations, contracts) {
     locationById.set(d.id, d);
     d.clients = [];
     d.contractors = [];
+    d.contracts = [];
   });
 
   contracts.forEach(function (contract) {
 
-    var source = locationById.get(contract.source),
-        target = locationById.get(contract.target),
-        link = {source: source, target: target};
+    var source = locationById.get(contract.source);
+    var target = locationById.get(contract.target);
+    var link = {source: source, target: target};
 
     source.clients.push(link);
     target.contractors.push(link);
+    target.contracts.push(contract);
   });
 
   locations = locations.filter(function (d) {
@@ -134,8 +145,6 @@ function drawMap(error, germany, locations, contracts) {
   
     linked[contract.source + ',' + contract.target] = true;
   });
-
-  console.log(linked);
 
   var svg = $map.append("svg")
       .attr("width", width)
@@ -175,15 +184,27 @@ function drawMap(error, germany, locations, contracts) {
           '<p>Typ: ' + d.type + '</p>' + 
           '<p>Sector: ' + d.sector + '</p>';
       });
+
+      $list.html(function () {
+
+        var html = '';
+
+        for (var i = 0; i < d.contracts.length; i++) {
+
+          html += '<p><a title="' + d.contracts[i].name +'" href="' + d.contracts[i].url + '" target="_blank"> ' + d.contracts[i].name + ' (' + d.contracts[i].year + ')</a></p>';
+        }
+
+        return html;
+      });
     })
     .on("mouseout",  function (d, i) {
 
-      connectedNodes(null);
+      connectedNodes();
     });
 
   function connectedNodes(d) {
 
-    if (d !== null) {
+    if (d) {
 
       location.style('opacity', function (o) {
 
@@ -245,4 +266,14 @@ function drawMap(error, germany, locations, contracts) {
 function resetGraph() {
 
   d3.select('svg').remove();
+}
+
+function applyListHeight() {
+
+  var sidebarHeight = parseInt($sidebar.style('height'));
+  var infoHeight = parseInt($info.style('height'));
+  var legendHeight = parseInt($legend.style('height'));
+  var listHeight = sidebarHeight - infoHeight - legendHeight;
+
+  $list.style('height', listHeight + 'px');
 }
