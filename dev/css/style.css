@@ -170,14 +170,12 @@ aside a {
   stroke: #fff;
   stroke-width: 3px;
   pointer-events: none;
-}
 
-.location {
-  -webkit-transition: opacity .1s ease-in-out;
-  -moz-transition: opacity .1s ease-in-out;
-  -ms-transition: opacity .1s ease-in-out;
-  -o-transition: opacity .1s ease-in-out;
-  transition: opacity .1s ease-in-out;
+  -webkit-transition: opacity .3s ease-in-out;
+  -moz-transition: opacity .3s ease-in-out;
+  -ms-transition: opacity .3s ease-in-out;
+  -o-transition: opacity .3s ease-in-out;
+  transition: opacity .3s ease-in-out;
 }
 
 .location:hover .link {
@@ -200,7 +198,7 @@ aside a {
   fill: #616161;
 }
 
-.contractor .position text {
+.position text {
   opacity: 0;
   fill: #fff;
   stroke: none;
@@ -211,7 +209,7 @@ aside a {
   fill: #27AFFF;
 }
 
-.contractor .position.highlight text {
+.position.highlight text {
   opacity: 1;
 }
 

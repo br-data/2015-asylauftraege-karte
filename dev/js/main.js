@@ -38,9 +38,9 @@
     addEventListeners();
     
     queue()
-      .defer(d3.json, "data/germany.json")
-      .defer(d3.json, "data/locations.json")
-      .defer(d3.json, "data/contracts.json")
+      .defer(d3.json, 'data/germany.json')
+      .defer(d3.json, 'data/locations.json')
+      .defer(d3.json, 'data/contracts.json')
       .await(drawMap);
   })();
 
@@ -126,9 +126,9 @@
         .scaleExtent([0.4, 3])
         .on('zoom', zoomed);
 
-    svg = element.map.append("svg")
-        .attr("width", width)
-        .attr("height", height)
+    svg = element.map.append('svg')
+        .attr('width', width)
+        .attr('height', height)
          .attr('pointer-events', 'all')
       .append('svg:g')
         .call(zoom)
@@ -147,29 +147,29 @@
         return d;
       });
 
-    svg.append("path")
+    svg.append('path')
         .datum(feature)
-        .attr("class", "states")
-        .attr("d", path);
+        .attr('class', 'states')
+        .attr('d', path);
 
-    svg.append("path")
+    svg.append('path')
         .datum(mesh)
-        .attr("class", "state-borders")
-        .attr("d", path);
+        .attr('class', 'state-borders')
+        .attr('d', path);
 
-    location = svg.append("g")
-        .attr("class", "locations")
-      .selectAll("g")
+    location = svg.append('g')
+        .attr('class', 'locations')
+      .selectAll('g')
         .data(locations.sort(function (a, b) {
 
           return b.count - a.count;
         }))
-      .enter().append("g")
-        .attr("class", function(d) {
+      .enter().append('g')
+        .attr('class', function(d) {
 
           return 'location ' + d.type;
         })
-      .on("mousemove", function (d, i) {
+      .on('mousemove', function (d, i) {
 
         if (d.id != currentId) {
 
@@ -180,42 +180,42 @@
           updateList(d);
         }
       })
-      .on("mouseout",  function (d, i) {
+      .on('mouseout',  function (d, i) {
 
         currentId = undefined;
         highlightLocation();
       });
 
-    location.append("g")
-        .attr("class", "link")
-      .selectAll("path")
+    location.append('g')
+        .attr('class', 'link')
+      .selectAll('path')
         .data(function (d) {
 
           //return d.clients.concat(d.contractors);
           return d.contractors;
         })
-      .enter().append("path")
-        .attr("d", function (d) {
+      .enter().append('path')
+        .attr('d', function (d) {
 
-          return path({type: "LineString", coordinates: [d.source, d.target]});
+          return path({type: 'LineString', coordinates: [d.source, d.target]});
         })
-        .attr("stroke-width", function (d) {
+        .attr('stroke-width', function (d) {
 
           return Math.floor((d.target.contractors.length - 1) * 0.3 + 2);
 
         });
 
-    position = location.append("g")
-        .attr("class", "position")
-        .attr("transform", function (d) {
+    position = location.append('g')
+        .attr('class', 'position')
+        .attr('transform', function (d) {
 
-          return "translate(" + d.x + "," + d.y + ")";
-        })
+          return 'translate(' + d.x + ',' + d.y + ')';
+        });
 
     position.append('svg:text')
         .attr('x', 14)
         .attr('y', '.4em')
-        .text(function(d) {
+        .text(function (d) {
           
           if (d.type === 'contractor') {
 
@@ -223,12 +223,12 @@
           } 
         });
 
-    position.append("circle")
-        .attr("class", function (d) {
+    position.append('circle')
+        .attr('class', function (d) {
 
           return d.type;
         })
-        .attr("r", function (d, i) {
+        .attr('r', function (d, i) {
 
           return d.type === 'client' ? (Math.floor((d.count - 1) * 0.7 + 5)) : 7;
         });
