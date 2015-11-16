@@ -312,13 +312,15 @@
 
       var html = '';
 
+      d.contracts.sort(sortByYear);
+
       for (var i = 0; i < d.contracts.length; i++) {
 
         html += '<p><a title="' + d.contracts[i].name +'" href="' +
                 d.contracts[i].url + '" target="_blank"> ' +
                 d.contracts[i].year + ': ' + d.contracts[i].name + '</a></p>';
       }
-      
+
       return html;
     });
   }
@@ -431,6 +433,21 @@
     var listHeight = sidebarHeight - infoHeight - legendHeight;
 
     element.list.style('height', listHeight + 'px');
+  }
+
+  function sortByYear(a, b) {
+
+    if (a.year < b.year) { 
+
+      return -1;
+    }
+
+    if (a.year > b.year) {
+
+      return 1;
+    }
+
+    return 0;
   }
 
   d3.selection.prototype.moveToFront = function () {
