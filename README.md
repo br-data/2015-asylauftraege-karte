@@ -39,3 +39,6 @@ Direktlink:
     "url": "http://ted.europa.eu/udl?uri=TED:NOTICE:385111-2015:TEXT:DE:HTML&src=0"
 }
 ```
+
+### Verbesserungen
+- Dependencies nicht einchecken, sondern über Bower installieren.

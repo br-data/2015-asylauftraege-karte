@@ -5,6 +5,8 @@
   width, height, center, scale, offset, hscale, vscale, bounds,
   position, location, locationById, timeout, currentId;
 
+  var clicked;
+
   var linked = [];
 
   var element = {
@@ -134,15 +136,7 @@
         .call(zoom)
       .append('svg:g');
 
-    rect = svg.append('svg:rect')
-        .attr('width', width * 2)
-        .attr('height', height * 2)
-        .attr('x', width / 2 - width)
-        .attr('y', height / 2 - height)
-        .attr('fill', '#fff')
-        .attr('fill-opacity', '0');
-
-    drag = d3.behavior.drag().origin(function(d) {
+    drag = d3.behavior.drag().origin(function (d) {
 
         return d;
       });
@@ -150,12 +144,29 @@
     svg.append('path')
         .datum(feature)
         .attr('class', 'states')
-        .attr('d', path);
+        .attr('d', path)
 
     svg.append('path')
         .datum(mesh)
         .attr('class', 'state-borders')
         .attr('d', path);
+
+    rect = svg.append('svg:rect')
+        .attr('width', width * 2)
+        .attr('height', height * 2)
+        .attr('x', width / 2 - width)
+        .attr('y', height / 2 - height)
+        .attr('fill', '#fff')
+        .attr('fill-opacity', '0')
+        .on('click', function (d) {
+
+          if (clicked) {
+
+            handleLocationDeselect()
+            
+            clicked = false;
+          }
+        });
 
     location = svg.append('g')
         .attr('class', 'locations')
@@ -165,25 +176,29 @@
           return b.count - a.count;
         }))
       .enter().append('g')
-        .attr('class', function(d) {
+      .on('mousemove', function (d) {
 
-          return 'location ' + d.type;
-        })
-      .on('mousemove', function (d, i) {
+        if (!clicked && d.id != currentId) {
 
-        if (d.id != currentId) {
-
-          currentId = d.id;
-
-          highlightLocation(d);
-          updateInfo(d);
-          updateList(d);
+          handleLocationSelect(d)
         }
       })
-      .on('mouseout',  function (d, i) {
+      .on('mouseout',  function (d) {
 
-        currentId = undefined;
-        highlightLocation();
+        if (!clicked) {
+
+          handleLocationDeselect()
+        }
+      })
+      .on('click', function (d) {
+
+        if (clicked) {
+
+          handleLocationSelect(d)
+        } else {
+
+          clicked = true;
+        }
       });
 
     location.append('g')
@@ -206,7 +221,10 @@
         });
 
     position = location.append('g')
-        .attr('class', 'position')
+        .attr('class', function (d) {
+
+          return 'position ' + d.type;
+        })
         .attr('transform', function (d) {
 
           return 'translate(' + d.x + ',' + d.y + ')';
@@ -224,10 +242,6 @@
         });
 
     position.append('circle')
-        .attr('class', function (d) {
-
-          return d.type;
-        })
         .attr('r', function (d, i) {
 
           return d.type === 'client' ? (Math.floor((d.count - 1) * 0.7 + 5)) : 7;
@@ -255,21 +269,21 @@
             d3.select(this).moveToFront();
         }
       });
-
+      
       // Highlight currently selected 
-      position.attr('class', function (o) {
+      location.attr('class', function (o) {
 
         if (d.id === o.id || linked[o.id + ',' + d.id]) {
 
-          return 'position highlight';
+          return 'location highlight';
         } else {
 
-          return 'position dim';
+          return 'location dim';
         }
       });
     } else {
 
-      position.attr('class', 'position');
+      location.attr('class', 'location');
     }
   }
 
@@ -374,6 +388,21 @@
 
     resetGraph();
     drawMap(undefined, data.germany, data.locations, data.contracts);
+  }
+
+  function handleLocationSelect(d) {
+
+    currentId = d.id;
+
+    highlightLocation(d);
+    updateInfo(d);
+    updateList(d);
+  }
+
+  function handleLocationDeselect() {
+
+    currentId = undefined;
+    highlightLocation();
   }
 
   function handleResize() {

@@ -114,6 +114,7 @@ aside a {
 }
 
 .list p {
+  color: #007bc2;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -171,26 +172,6 @@ aside a {
   stroke-width: 3px;
   pointer-events: none;
 
-  -webkit-transition: opacity .3s ease-in-out;
-  -moz-transition: opacity .3s ease-in-out;
-  -ms-transition: opacity .3s ease-in-out;
-  -o-transition: opacity .3s ease-in-out;
-  transition: opacity .3s ease-in-out;
-}
-
-.location:hover .link {
-  opacity: 1;
-}
-
-.client {
-  cursor: pointer;
-}
-
-.contractor {
-  pointer-events: none;
-}
-
-.position {
   -webkit-transition: opacity .1s ease-in-out;
   -moz-transition: opacity .1s ease-in-out;
   -ms-transition: opacity .1s ease-in-out;
@@ -198,37 +179,54 @@ aside a {
   transition: opacity .1s ease-in-out;
 }
 
-.position.dim {
+.location {
+  pointer-events: none;
+}
+
+.location.dim {
   opacity: 0.1;
 }
 
-.contractor .position circle {
-  fill: #616161;
+.location.highlight .link {
+  opacity: 1;
+}
+
+.location.highlight .position.contractor {
+  opacity: 1;
+}
+
+.position {
+  -webkit-transition: opacity .3s ease-in-out;
+  -moz-transition: opacity .3s ease-in-out;
+  -ms-transition: opacity .3s ease-in-out;
+  -o-transition: opacity .3s ease-in-out;
+  transition: opacity .3s ease-in-out;
 }
 
 .position text {
-  opacity: 0;
   fill: #fff;
   stroke: none;
   text-shadow: 1px 1px 1px #616161,1px -1px 1px #616161,-1px 1px 1px #616161,-1px -1px 1px #616161;
 }
 
-.contractor .position.highlight circle {
+.position.contractor {
+  stroke: #fff;
   fill: #27AFFF;
+  opacity: 0;
 }
 
-.position.highlight text {
-  opacity: 1;
+.position.client {
+  cursor: pointer;
+  pointer-events: all;
+  stroke: #fff;
+  fill: #A4D51B;
 }
 
 .contractor {
-  stroke: #fff;
   background: #27AFFF;
 }
 
 .client {
-  stroke: #fff;
-  fill: #A4D51B;
   background: #A4D51B;
 }
 
