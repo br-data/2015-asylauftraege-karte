@@ -3,11 +3,18 @@
 
   var svg, rect, zoom, feature, mesh, projection, path,
   width, height, center, scale, offset, hscale, vscale, bounds,
-  position, location, locationById, timeout, currentId;
-
-  var clicked;
+  position, location, locationById, timeout, currentId, clicked,
+  maxCount, minCount, maxCountR, minCountR;
 
   var linked = [];
+
+  var config = {
+
+    minCircleRadius: 7,
+    maxCircleRadius: 15,
+    minLinkStroke: 2,
+    maxLinkStroke: 6
+  };
 
   var element = {
 
@@ -124,6 +131,20 @@
       linked[contract.source + ',' + contract.target] = true;
     });
 
+    maxCount = d3.max(locations, function (d) {
+      
+      return d.contractors.length;
+    });
+
+    maxCountR = Math.sqrt(maxCount / Math.PI);
+
+    minCount = d3.min(locations, function (d) {
+      
+      return d.contractors.length || 1;
+    });
+
+    minCountR = Math.sqrt(minCount / Math.PI);
+
     zoom = d3.behavior.zoom()
         .scaleExtent([0.4, 3])
         .on('zoom', zoomed);
@@ -139,7 +160,7 @@
     svg.append('path')
         .datum(feature)
         .attr('class', 'states')
-        .attr('d', path)
+        .attr('d', path);
 
     svg.append('path')
         .datum(mesh)
@@ -219,8 +240,8 @@
         })
         .attr('stroke-width', function (d) {
 
-          return Math.floor((d.target.contractors.length - 1) * 0.3 + 2);
-
+          return mapValue(d.target.contractors.length, minCount, maxCount,
+            config.minLinkStroke, config.maxLinkStroke);
         });
 
     position = location.append('g')
@@ -247,7 +268,10 @@
     position.append('circle')
         .attr('r', function (d, i) {
 
-          return d.type === 'client' ? (Math.floor((d.count - 1) * 0.7 + 5)) : 7;
+          var radius = mapValue(Math.sqrt(d.count / Math.PI), minCountR, maxCountR,
+            config.minCircleRadius, config.maxCircleRadius);
+
+          return d.type === 'client' ? radius : 7;
         });
   }
 
@@ -433,6 +457,11 @@
     var listHeight = sidebarHeight - infoHeight - legendHeight;
 
     element.list.style('height', listHeight + 'px');
+  }
+
+  function mapValue(value, fromMin, toMin, fromMax, toMax) {
+
+    return (value - fromMin) / (toMin - fromMin) * (toMax - fromMax) + fromMax;
   }
 
   function sortByYear(a, b) {
