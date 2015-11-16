@@ -192,9 +192,11 @@
       })
       .on('click', function (d) {
 
-        if (clicked) {
+        if (clicked && d.id === currentId) {
 
-          handleLocationSelect(d)
+          handleLocationDeselect();
+
+          clicked = false;
         } else {
 
           clicked = true;
