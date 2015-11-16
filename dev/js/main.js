@@ -1,7 +1,7 @@
 
 (function app() {
 
-  var svg, rect, zoom, drag, feature, mesh, projection, path,
+  var svg, rect, zoom, feature, mesh, projection, path,
   width, height, center, scale, offset, hscale, vscale, bounds,
   position, location, locationById, timeout, currentId;
 
@@ -136,11 +136,6 @@
         .call(zoom)
       .append('svg:g');
 
-    drag = d3.behavior.drag().origin(function (d) {
-
-        return d;
-      });
-
     svg.append('path')
         .datum(feature)
         .attr('class', 'states')
@@ -162,8 +157,7 @@
 
           if (clicked) {
 
-            handleLocationDeselect()
-            
+            handleLocationDeselect();
             clicked = false;
           }
         });
@@ -180,23 +174,30 @@
 
         if (!clicked && d.id != currentId) {
 
-          handleLocationSelect(d)
+          handleLocationSelect(d);
         }
       })
       .on('mouseout',  function (d) {
 
         if (!clicked) {
 
-          handleLocationDeselect()
+          handleLocationDeselect();
         }
       })
       .on('click', function (d) {
 
-        if (clicked && d.id === currentId) {
+        if (clicked) {
 
-          handleLocationDeselect();
+          if (d.id === currentId) {
 
-          clicked = false;
+            handleLocationDeselect();
+            clicked = false;
+
+          } else {
+
+            handleLocationSelect(d);
+            clicked = true;
+          }
         } else {
 
           clicked = true;
@@ -315,14 +316,16 @@
 
         html += '<p><a title="' + d.contracts[i].name +'" href="' +
                 d.contracts[i].url + '" target="_blank"> ' +
-                d.contracts[i].name + ' (' + d.contracts[i].year + ')</a></p>';
+                d.contracts[i].year + ': ' + d.contracts[i].name + '</a></p>';
       }
-
+      
       return html;
     });
   }
 
   function zoomed() {
+
+    console.log("zoom");
 
     svg.attr('transform',
         'translate(' + zoom.translate() + ')' +
