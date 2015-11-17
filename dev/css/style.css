@@ -133,7 +133,7 @@ aside a {
 }
 
 .legend {
-  height: 160px;
+  height: 180px;
   width: 100%;
   position: absolute;
   bottom: 0;
@@ -332,6 +332,11 @@ aside a {
     display: inline-block;
     width: 120px;
     position: relative;
+    background: none;
+  }
+
+  .legend ul {
+    background: none;
   }
 
   .close {
