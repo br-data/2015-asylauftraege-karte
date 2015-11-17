@@ -279,19 +279,10 @@
 
     if (d) {
 
-      // Move link to front
+      // Move highlighted to front
       location.each(function (o) {
 
         if (d.id === o.id || linked[o.id + ',' + d.id]) {
-
-            d3.select(this).moveToFront();
-        }
-      });
-
-      // Move contractor marker to front
-      location.each(function (o) {
-
-        if (o.type === 'contractor' && linked[o.id + ',' + d.id]) {
 
             d3.select(this).moveToFront();
         }
@@ -350,8 +341,6 @@
   }
 
   function zoomed() {
-
-    console.log("zoom");
 
     svg.attr('transform',
         'translate(' + zoom.translate() + ')' +
