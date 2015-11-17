@@ -267,6 +267,20 @@ aside a {
   color: #fff;
 }
 
+.logo {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  border: 0;
+  text-decoration: none;
+  color: transparent;
+}
+
+.logo img {
+  width: 70px;
+  border-radius: 5px;
+}
+
 .noselect {
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -323,7 +337,6 @@ aside a {
   .open {
     display: none;
   }
-
 }
 
 @media all and (max-width: 360px) {
