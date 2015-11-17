@@ -341,6 +341,10 @@ aside a {
   .open {
     display: none;
   }
+
+  .logo {
+    display: none;
+  }
 }
 
 @media all and (max-width: 360px) {
@@ -360,6 +364,5 @@ aside a {
   .legend {
     display: none;
   }
-
 }
 
