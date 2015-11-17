@@ -276,3 +276,73 @@ aside a {
     user-select: none;
 }
 
+@media all and (max-width: 640px) {
+
+  .map {
+    width: 100%;
+    height: calc(100% - 170px);
+  } 
+
+  aside {
+    display: block;
+    width: 100%;
+    height: 170px;
+    bottom: 0;
+    top: inherit;
+    padding: 1em 1.5em;
+    border-left: 0;
+  }
+
+  aside h2 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    width: calc(100% + 140px);
+  }
+
+  .list-wrapper, .gradient {
+    display: none;
+  }
+
+  .info {
+    display: inline-block;
+    width: calc(100% - 140px);
+  }
+
+  .legend {
+    margin-left: 1em;
+    display: inline-block;
+    width: 120px;
+    position: relative;
+  }
+
+  .close {
+    display: none;
+  }
+
+  .open {
+    display: none;
+  }
+
+}
+
+@media all and (max-width: 360px) {
+
+  .map {
+    height: calc(100% - 60px);
+  }
+
+  aside {
+    height: 60px;
+  }
+
+  .info p {
+    display: none;
+  }
+
+  .legend {
+    display: none;
+  }
+
+}
+

@@ -279,10 +279,19 @@
 
     if (d) {
 
-      // Move highlighted to front
+      // Move link to front
       location.each(function (o) {
 
         if (d.id === o.id || linked[o.id + ',' + d.id]) {
+
+            d3.select(this).moveToFront();
+        }
+      });
+
+      // Move contractor marker to front
+      location.each(function (o) {
+
+        if (o.type === 'contractor' && linked[o.id + ',' + d.id]) {
 
             d3.select(this).moveToFront();
         }
@@ -304,6 +313,7 @@
       location.attr('class', 'location');
     }
   }
+
 
   function updateInfo(d) {
     
@@ -390,6 +400,7 @@
   }
 
   function closeSidebar() {
+    
     element.sidebar.style('display', 'none');
     element.close.style('display', 'none');
     element.open.style('display', 'block');
