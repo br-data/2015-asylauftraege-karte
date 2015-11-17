@@ -119,6 +119,11 @@
 
         d[0] = +d.long;
         d[1] = +d.lat;
+
+        if (d[1] < 46) {
+          console.log(d);
+        }
+
         var position = projection(d);
         d.x = position[0];
         d.y = position[1];
@@ -400,7 +405,7 @@
   }
 
   function closeSidebar() {
-    
+
     element.sidebar.style('display', 'none');
     element.close.style('display', 'none');
     element.open.style('display', 'block');
