@@ -152,6 +152,14 @@ aside a {
   padding: 0.2em 0;
 }
 
+.legend .source {
+  margin-top: .2em;
+  color: #999;
+}
+.legend .source a {
+  color: #999;
+}
+
 .states {
   fill: #616161;
 }
@@ -352,7 +360,7 @@ aside a {
   }
 }
 
-@media all and (max-width: 360px) {
+@media all and (max-width: 390px) {
 
   .map {
     height: calc(100% - 60px);
