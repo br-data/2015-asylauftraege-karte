@@ -121,7 +121,6 @@ aside a {
 }
 
 .gradient {
-  opacity: 1;
   height: 60px;
   right: 0;
   width: 100%;
@@ -184,7 +183,7 @@ aside a {
 }
 
 .location.dim {
-  opacity: 0.1;
+  opacity: .1;
 }
 
 .location.highlight .link {

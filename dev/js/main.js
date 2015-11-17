@@ -9,9 +9,9 @@
   var linked = [];
 
   var config = {
-
+    scale: 150,
     minCircleRadius: 7,
-    maxCircleRadius: 15,
+    maxCircleRadius: 17,
     minLinkStroke: 2,
     maxLinkStroke: 6
   };
@@ -77,7 +77,7 @@
       });
 
     center = d3.geo.centroid(feature);
-    scale  = 150;
+    scale  = config.scale;
     offset = [width / 2, height / 2];
     projection = d3.geo.mercator().scale(scale).center(center)
         .translate(offset);
