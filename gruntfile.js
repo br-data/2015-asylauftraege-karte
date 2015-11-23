@@ -31,7 +31,7 @@ module.exports = function (grunt) {
 
             build: {
 
-                src: 'dev/css/*',
+                src: 'dev/css/style.css',
                 dest: 'dist/css/style.min.css'
             }
         },
@@ -43,6 +43,8 @@ module.exports = function (grunt) {
                 files: [
 
                     { expand: true, flatten: true, src: ['dev/index.html'], dest: 'dist', filter: 'isFile' },
+                    { expand: true, flatten: true, src: ['dev/preview.jpg'], dest: 'dist', filter: 'isFile' },
+                    { expand: true, flatten: true, src: ['dev/css/brdata.png'], dest: 'dist/css', filter: 'isFile' },
                     { expand: true, flatten: true, src: ['dev/data/*'], dest: 'dist/data', filter: 'isFile' }
                 ]
             }

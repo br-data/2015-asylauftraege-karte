@@ -120,10 +120,6 @@
         d[0] = +d.long;
         d[1] = +d.lat;
 
-        if (d[1] < 46) {
-          console.log(d);
-        }
-
         var position = projection(d);
         d.x = position[0];
         d.y = position[1];
@@ -319,7 +315,6 @@
     }
   }
 
-
   function updateInfo(d) {
     
     element.info.html(function() {
@@ -329,8 +324,7 @@
       html += '<h2>' + d.name + '</h2>' +
               '<p><strong>Ort:</strong> ' + d.city + '</p>' +
               '<p><strong>Anzahl der Aufträge:</strong> ' + d.contractors.length + '</p>' + 
-              '<p><strong>Typ:</strong> ' + d.type + '</p>' + 
-              '<p><strong>Sector:</strong> ' + d.sector + '</p>';
+              '<p><strong>Sektor:</strong> ' + d.sector + '</p>';
 
       return html;
     });
