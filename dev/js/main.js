@@ -266,6 +266,12 @@
           } 
         });
 
+    // position.append("svg:title")
+    //     .text(function (d) {
+          
+    //       return d.name;
+    //     });
+
     position.append('circle')
         .attr('r', function (d, i) {
 
