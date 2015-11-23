@@ -326,6 +326,10 @@ aside a {
     width: calc(100% + 140px);
   }
 
+  .spacer {
+    display: none;
+  }
+
   .list-wrapper, .gradient {
     display: none;
   }
@@ -356,6 +360,13 @@ aside a {
   }
 
   .logo {
+    display: none;
+  }
+}
+
+@media all and (max-width: 500px) {
+  
+  .explainer {
     display: none;
   }
 }
