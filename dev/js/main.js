@@ -332,8 +332,8 @@
       html += '<h2>' + d.name + '</h2>' +
               '<p><strong>Ort:</strong> ' + d.city + '</p>' +
               '<p><strong>Anzahl der Aufträge:</strong> ' + d.contractors.length + '</p>' + 
-              '<p><strong>Typ:</strong> ' + d.form + '</p>' + 
-              '<p><strong>Branche:</strong> ' + d.sector + '</p>';
+              '<p><strong>Branche:</strong> ' + d.sector + '</p>' +
+              '<p><strong>Typ:</strong> ' + d.form + '</p>';
 
       return html;
     });
