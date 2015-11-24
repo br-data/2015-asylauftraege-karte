@@ -331,7 +331,7 @@
       html += '<h2>' + d.name + '</h2>' +
               '<p><strong>Ort:</strong> ' + d.city + '</p>' +
               '<p><strong>Anzahl der Aufträge:</strong> ' + d.contractors.length + '</p>' + 
-              '<p><strong>Typ:</strong> ' + d.type + '</p>' + 
+              '<p><strong>Typ:</strong> ' + d.form + '</p>' + 
               '<p><strong>Sector:</strong> ' + d.sector + '</p>';
 
       return html;
