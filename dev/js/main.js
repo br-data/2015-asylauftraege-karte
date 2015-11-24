@@ -9,6 +9,7 @@
   var linked = [];
 
   var config = {
+
     scale: 150,
     minCircleRadius: 7,
     maxCircleRadius: 17,
@@ -260,7 +261,7 @@
         .attr('y', '.4em')
         .text(function (d) {
           
-          if (d.type === 'contractor') {
+          if (d.type === 'client') {
 
             return d.name;
           } 
@@ -278,7 +279,7 @@
           var radius = mapValue(Math.sqrt(d.count / Math.PI), minCountR, maxCountR,
             config.minCircleRadius, config.maxCircleRadius);
 
-          return d.type === 'client' ? radius : 7;
+          return d.type === 'contractor' ? radius : 7;
         });
   }
 
@@ -295,10 +296,10 @@
         }
       });
 
-      // Move contractor marker to front
+      // Move client marker to front
       location.each(function (o) {
 
-        if (o.type === 'contractor' && linked[o.id + ',' + d.id]) {
+        if (o.type === 'client' && linked[o.id + ',' + d.id]) {
 
             d3.select(this).moveToFront();
         }
@@ -332,7 +333,7 @@
               '<p><strong>Ort:</strong> ' + d.city + '</p>' +
               '<p><strong>Anzahl der Aufträge:</strong> ' + d.contractors.length + '</p>' + 
               '<p><strong>Typ:</strong> ' + d.form + '</p>' + 
-              '<p><strong>Sector:</strong> ' + d.sector + '</p>';
+              '<p><strong>Branche:</strong> ' + d.sector + '</p>';
 
       return html;
     });

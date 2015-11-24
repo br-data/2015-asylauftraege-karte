@@ -48,6 +48,8 @@ aside p {
 
 aside h2 {
   margin: 0 0 1em;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 aside a {
@@ -83,7 +85,7 @@ aside a {
   float: right;
   font-size: 2em;
   line-height: 1em;
-  margin-left: 1em;
+  margin-left: .5em;
   font-weight: bold;
   text-decoration: none;
   cursor: pointer;
@@ -203,7 +205,7 @@ aside a {
   opacity: 1;
 }
 
-.location.highlight .position.contractor {
+.location.highlight .position.client {
   opacity: 1;
 }
 
@@ -221,24 +223,24 @@ aside a {
   text-shadow: 1px 1px 1px #616161,1px -1px 1px #616161,-1px 1px 1px #616161,-1px -1px 1px #616161;
 }
 
-.position.contractor {
+.position.client {
   stroke: #fff;
   fill: #27AFFF;
   opacity: 0;
 }
 
-.position.client {
+.position.contractor {
   cursor: pointer;
   pointer-events: all;
   stroke: #fff;
   fill: #A4D51B;
 }
 
-.contractor {
+.client {
   background: #27AFFF;
 }
 
-.client {
+.contractor {
   background: #A4D51B;
 }
 
@@ -321,8 +323,6 @@ aside a {
 
   aside h2 {
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
     width: calc(100% + 140px);
   }
 
