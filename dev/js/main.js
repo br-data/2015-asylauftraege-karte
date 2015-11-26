@@ -109,8 +109,6 @@
       var target = locationById.get(contract.target);
       var link = {source: source, target: target};
 
-      console.log(target ? true : contract);
-
       source.clients.push(link);
       target.contractors.push(link);
       target.contracts.push(contract);
