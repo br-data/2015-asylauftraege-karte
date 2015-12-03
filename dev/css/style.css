@@ -21,6 +21,10 @@ body {
   overflow: hidden;
 }
 
+main {
+  display: block;
+}
+
 .map {
   width: calc(100% - 240px);
   display: inline-block;
