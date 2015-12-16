@@ -464,8 +464,6 @@
     var legendHeight = parseInt(element.legend.style('height'));
     var listHeight = Math.abs(sidebarHeight - infoHeight - legendHeight);
 
-    console.log(listHeight);
-
     element.list.style('height', listHeight + 'px');
   }
 
