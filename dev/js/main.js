@@ -157,6 +157,8 @@
          .attr('pointer-events', 'all')
       .append('svg:g')
         .call(zoom)
+        .on('wheel.zoom', null)
+        .on('mousewheel.zoom', null)
       .append('svg:g');
 
     svg.append('path')
