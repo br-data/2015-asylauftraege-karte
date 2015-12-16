@@ -1,8 +1,8 @@
 # Karte der Asylgroßaufträge
 Karte aller Großaufträge im Bereich Flüchtlingsunterkünfte/Asyl aus der Europäischen Ausschreibungsdatenbank TED. Welches Unternehmen hat wann, wie viele Auftraäge bekommen und für was? Die Visualisierung benutzt die JavaScript-Bibliothek D3.js.
 
-Artikel:
-Direktlink:
+Artikel: http://www.br.de/extra/br-data/asyl-grossauftraege-karte-100.html
+Direktlink: http://web.br.de/interaktiv/asylauftraege/
 
 ### Verwendung
 1. Repository klonen `git clone https://...`
