@@ -9,7 +9,7 @@
   var linked = [];
 
   var config = {
-
+    
     scale: 150,
     minCircleRadius: 7,
     maxCircleRadius: 17,
