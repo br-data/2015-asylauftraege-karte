@@ -6,22 +6,22 @@ module.exports = function (grunt) {
 
         clean: {
 
-            build: {
+            dist: {
                 src: ['dist']
             }
         },
 
         uglify: {
 
-            build: {
+            dist: {
 
                 files: {
                     
                     'dist/js/main.min.js': [
-                        'dev/js/lib/d3.min.js',
-                        'dev/js/lib/queue.min.js',
-                        'dev/js/lib/topojson.min.js',
-                        'dev/js/main.js'
+                        'src/js/lib/d3.min.js',
+                        'src/js/lib/queue.min.js',
+                        'src/js/lib/topojson.min.js',
+                        'src/js/main.js'
                     ]
                 }
             }
@@ -29,30 +29,30 @@ module.exports = function (grunt) {
 
         cssmin: {
 
-            build: {
+            dist: {
 
-                src: 'dev/css/style.css',
+                src: 'src/css/style.css',
                 dest: 'dist/css/style.min.css'
             }
         },
 
         copy: {
 
-            build: {
+            dist: {
 
                 files: [
 
-                    { expand: true, flatten: true, src: ['dev/index.html'], dest: 'dist', filter: 'isFile' },
-                    { expand: true, flatten: true, src: ['dev/preview.jpg'], dest: 'dist', filter: 'isFile' },
-                    { expand: true, flatten: true, src: ['dev/css/brdata.png'], dest: 'dist/css', filter: 'isFile' },
-                    { expand: true, flatten: true, src: ['dev/data/*'], dest: 'dist/data', filter: 'isFile' }
+                    { expand: true, flatten: true, src: ['src/index.html'], dest: 'dist', filter: 'isFile' },
+                    { expand: true, flatten: true, src: ['src/preview.jpg'], dest: 'dist', filter: 'isFile' },
+                    { expand: true, flatten: true, src: ['src/css/brdata.png'], dest: 'dist/css', filter: 'isFile' },
+                    { expand: true, flatten: true, src: ['src/data/*'], dest: 'dist/data', filter: 'isFile' }
                 ]
             }
         },
 
         useminPrepare: {
 
-            html: 'dev/index.html'
+            html: 'src/index.html'
         },
 
         usemin: {
@@ -67,5 +67,5 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-usemin');
 
-    grunt.registerTask('build', ['clean:build', 'useminPrepare', 'uglify:build', 'cssmin:build', 'copy:build', 'usemin']);
+    grunt.registerTask('dist', ['clean:build', 'useminPrepare', 'uglify:build', 'cssmin:build', 'copy:build', 'usemin']);
 };
