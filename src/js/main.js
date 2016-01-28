@@ -1,15 +1,16 @@
-
 (function app() {
 
-  var svg, rect, zoom, feature, mesh, projection, path,
-  width, height, center, scale, offset, hscale, vscale, bounds,
-  position, location, locationById, timeout, currentId, clicked,
-  maxCount, minCount, maxCountR, minCountR;
+  'use strict';
+
+  var svg, zoom, feature, mesh, projection, path,
+    width, height, center, scale, offset, hscale, vscale, bounds,
+    position, location, locationById, timeout, currentId, clicked,
+    maxCount, minCount, maxCountR, minCountR;
 
   var linked = [];
 
   var config = {
-    
+
     scale: 150,
     minCircleRadius: 7,
     maxCircleRadius: 17,
@@ -46,7 +47,7 @@
 
     applyListHeight();
     addEventListeners();
-    
+
     queue()
       .defer(d3.json, 'data/germany.json')
       .defer(d3.json, 'data/locations.json')
@@ -62,7 +63,7 @@
       data.locations = locations;
       data.contracts = contracts;
     }
-   
+
     if (error) {
 
       throw error;
@@ -74,14 +75,13 @@
     feature = topojson.feature(germany, germany.objects.subunits);
     mesh = topojson.mesh(germany, germany.objects.subunits, function (a, b) {
 
-        return a !== b;
-      });
+      return a !== b;
+    });
 
     center = d3.geo.centroid(feature);
     scale  = config.scale;
     offset = [width / 2, height / 2];
-    projection = d3.geo.mercator().scale(scale).center(center)
-        .translate(offset);
+    projection = d3.geo.mercator().scale(scale).center(center).translate(offset);
     path = d3.geo.path().projection(projection);
     bounds = path.bounds(feature);
     hscale = scale * width  / (bounds[1][0] - bounds[0][0]);
@@ -89,8 +89,7 @@
     scale = (hscale < vscale) ? hscale : vscale;
     offset = [width - (bounds[0][0] + bounds[1][0]) / 2, height - (bounds[0][1] + bounds[1][1]) / 2];
 
-    projection = d3.geo.mercator().center(center)
-      .scale(scale).translate(offset);
+    projection = d3.geo.mercator().center(center).scale(scale).translate(offset);
     path = path.projection(projection);
 
     locationById = d3.map();
@@ -116,11 +115,13 @@
 
     locations = locations.filter(function (d) {
 
-      if (d.count = Math.max(d.clients.length, d.contractors.length)) {
+      d.count = Math.max(d.clients.length, d.contractors.length);
+
+      if (d.count) {
 
         d[0] = +d.long;
         d[1] = +d.lat;
-        
+
         var position = projection(d);
         d.x = position[0];
         d.y = position[1];
@@ -128,20 +129,20 @@
       }
     });
 
-    contracts.forEach(function (contract, i) {
-    
+    contracts.forEach(function (contract) {
+
       linked[contract.source + ',' + contract.target] = true;
     });
 
     maxCount = d3.max(locations, function (d) {
-      
+
       return d.contractors.length;
     });
 
     maxCountR = Math.sqrt(maxCount / Math.PI);
 
     minCount = d3.min(locations, function (d) {
-      
+
       return d.contractors.length || 1;
     });
 
@@ -154,7 +155,7 @@
     svg = element.map.append('svg')
         .attr('width', width)
         .attr('height', height)
-         .attr('pointer-events', 'all')
+        .attr('pointer-events', 'all')
       .append('svg:g')
         .call(zoom)
         .on('wheel.zoom', null)
@@ -171,14 +172,14 @@
         .attr('class', 'state-borders')
         .attr('d', path);
 
-    rect = svg.append('svg:rect')
+    svg.append('svg:rect')
         .attr('width', width * 2)
         .attr('height', height * 2)
         .attr('x', width / 2 - width)
         .attr('y', height / 2 - height)
         .attr('fill', '#fff')
         .attr('fill-opacity', '0')
-        .on('click', function (d) {
+        .on('click', function () {
 
           if (clicked) {
 
@@ -202,7 +203,7 @@
           handleLocationSelect(d);
         }
       })
-      .on('mouseout',  function (d) {
+      .on('mouseout',  function () {
 
         if (!clicked) {
 
@@ -262,21 +263,21 @@
         .attr('x', 14)
         .attr('y', '.4em')
         .text(function (d) {
-          
+
           if (d.type === 'client') {
 
             return d.name;
-          } 
+          }
         });
 
     // position.append("svg:title")
     //     .text(function (d) {
-          
+
     //       return d.name;
     //     });
 
     position.append('circle')
-        .attr('r', function (d, i) {
+        .attr('r', function (d) {
 
           var radius = mapValue(Math.sqrt(d.count / Math.PI), minCountR, maxCountR,
             config.minCircleRadius, config.maxCircleRadius);
@@ -294,7 +295,7 @@
 
         if (d.id === o.id || linked[o.id + ',' + d.id]) {
 
-            d3.select(this).moveToFront();
+          d3.select(this).moveToFront();
         }
       });
 
@@ -303,11 +304,11 @@
 
         if (o.type === 'client' && linked[o.id + ',' + d.id]) {
 
-            d3.select(this).moveToFront();
+          d3.select(this).moveToFront();
         }
       });
-      
-      // Highlight currently selected 
+
+      // Highlight currently selected
       location.attr('class', function (o) {
 
         if (d.id === o.id || linked[o.id + ',' + d.id]) {
@@ -324,16 +325,15 @@
     }
   }
 
-
   function updateInfo(d) {
-    
+
     element.info.html(function() {
 
       var html = '';
 
       html += '<h2>' + d.name + '</h2>' +
               '<p><strong>Ort:</strong> ' + d.city + '</p>' +
-              '<p><strong>Anzahl der Aufträge:</strong> ' + d.contractors.length + '</p>' + 
+              '<p><strong>Anzahl der Aufträge:</strong> ' + d.contractors.length + '</p>' +
               '<p><strong>Branche:</strong> ' + d.sector + '</p>' +
               '<p><strong>Typ:</strong> ' + d.form + '</p>';
 
@@ -406,7 +406,7 @@
 
     element.open.on('click', openSidebar);
 
-    element.window.on('resize', handleResize); 
+    element.window.on('resize', handleResize);
   }
 
   function closeSidebar() {
@@ -476,7 +476,7 @@
 
   function sortByYear(a, b) {
 
-    if (a.year < b.year) { 
+    if (a.year < b.year) {
 
       return -1;
     }
@@ -497,16 +497,16 @@
     });
   };
 
-  d3.selection.prototype.moveToBack = function () { 
+  d3.selection.prototype.moveToBack = function () {
 
     return this.each(function () {
 
-        var firstChild = this.parentNode.firstChild; 
+      var firstChild = this.parentNode.firstChild;
 
-        if (firstChild) { 
+      if (firstChild) {
 
-            this.parentNode.insertBefore(this, firstChild); 
-        } 
-    }); 
+        this.parentNode.insertBefore(this, firstChild);
+      }
+    });
   };
 })();
