@@ -1,14 +1,14 @@
 # Karte der Asylgroßaufträge
 Karte aller Großaufträge im Bereich Flüchtlingsunterkünfte/Asyl aus der Europäischen Ausschreibungsdatenbank TED. Welches Unternehmen hat wann, wie viele Auftraäge bekommen und für was? Die Visualisierung benutzt die JavaScript-Bibliothek D3.js.
 
-Artikel: http://www.br.de/extra/br-data/asyl-grossauftraege-karte-100.html
-Direktlink: http://web.br.de/interaktiv/asylauftraege/
+- **Artikel**: http://www.br.de/extra/br-data/asyl-grossauftraege-karte-100.html
+- **Direktlink**: http://web.br.de/interaktiv/asylauftraege/
 
 ### Verwendung
 1. Repository klonen `git clone https://...`
 2. Erforderliche Module installieren `npm install`
-3. Projekt bauen mit `grunt build
-4. Webseite über Apache oder einen ähnlichen HTTP-Server ausliefern
+3. Projekt bauen mit `grunt dist`
+4. Website über Apache oder einen ähnlichen HTTP-Server ausliefern
 
 ### Daten
 **germany.json**: Deutschland mit Bundesländern im TopoJSON-Format
