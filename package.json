@@ -8,6 +8,10 @@
     "type": "git",
     "url": "git@github.com:br-data/asylauftraege-karte.git"
   },
+  "scripts": {
+    "start": "node node_modules/http-server/bin/http-server ./src -s -o --cors",
+    "build": "grunt dist"
+  },
   "dependencies": {
     "d3": "^3.5.17",
     "d3-queue": "^3.0.3",
@@ -20,6 +24,7 @@
     "grunt-contrib-copy": "~0.4.1",
     "grunt-contrib-cssmin": "~0.6.1",
     "grunt-contrib-uglify": "~0.2.4",
-    "grunt-usemin": "~0.1.12"
+    "grunt-usemin": "~0.1.12",
+    "http-server": "^0.10.0"
   }
 }
